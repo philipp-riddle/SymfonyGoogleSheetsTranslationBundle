@@ -1,0 +1,32 @@
+{
+    "name": "phiil/googlesheets-translation-bundle",
+    "description": "This bundle enables you to deploy your translation within seconds and the best part: Manage them in Googlesheets, probably the easiest way.",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Philipp Martini",
+            "email": "philipp@riddle.com"
+        }
+    ],
+    "require": {
+        "php": "^7.2.5",
+        "symfony/framework-bundle": "^5.0",
+        "symfony/translation": "^5.0",
+        "symfony/cache": "^5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Phiil\\GoogleSheetsTranslationBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Phiil\\GoogleSheetsTranslationBundle\\Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "symfony/phpunit-bridge": "^5.0",
+        "friendsofphp/php-cs-fixer": "^2.16"
+    }
+}

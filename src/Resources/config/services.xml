@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services
+        https://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="googlesheets_translations.sheet.publicId"></parameter>
+        <parameter key="googlesheets_translations.sheet.mode">all</parameter>
+    </parameters>
+    
+    <services>
+        <service id="phil_googlesheets_translations_bundle.googlesheets_service" class="Phiil\GoogleSheetsTranslationBundle\Service\GoogleSheetsService" public="true">
+            <argument type="service" id="Symfony\Component\DependencyInjection\ContainerInterface" />
+        </service>
+        <service id="Phiil\GoogleSheetsTranslationBundle\Service\GoogleSheetsService" alias="phil_googlesheets_translations_bundle.googlesheets_service" public="false" />
+        
+        <service id="phil_googlesheets_translations_bundle.translation_service" class="Phiil\GoogleSheetsTranslationBundle\Service\TranslationService" public="false">
+            <argument type="service" id="Phiil\GoogleSheetsTranslationBundle\Service\GoogleSheetsService"/>
+        </service>
+        <service id="Phiil\GoogleSheetsTranslationBundle\Service\TranslationService" alias="phil_googlesheets_translations_bundle.translation_service" public="false" />
+
+        <service id="phil_googlesheets_translations_bundle.translation_loader" class="Phiil\GoogleSheetsTranslationBundle\Translation\TranslationLoader" public="true">
+            <argument type="service" id="Phiil\GoogleSheetsTranslationBundle\Service\GoogleSheetsService"/>
+        </service>
+
+        
+        <service id="phil_googlesheets_translations_bundle.translation_reload_command" class="Phiil\GoogleSheetsTranslationBundle\Command\TranslationReloadCommand" public="false">
+            <argument type="service" id="Phiil\GoogleSheetsTranslationBundle\Service\GoogleSheetsService" />
+            <tag name="console.command"/>
+        </service>
+    </services>
+
+</container>
