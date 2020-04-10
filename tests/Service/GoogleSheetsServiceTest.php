@@ -17,6 +17,71 @@ class GoogleSheetsServiceTest extends PhiilTestCase
     private $skipColSheet = 6;
     private $noLocalesSheet = 7;
 
+    public function testParameters_sheetMode_number()
+    {
+        $service = new GoogleSheetsService($this->publicId1, 2);
+
+        $this->assertTrue($service->getSheetMode() === GoogleSheetsService::SINGLE_SHEET_PAGE);
+        $this->assertTrue($service->getSheetPage() === 2);
+        
+        $translations = $service->getTranslations(true);
+        $this->assertCount(3, $service->getLocales());
+        $this->assertCount(1, $translations['en']);
+    }
+
+    public function testParameters_sheetMode_constant()
+    {
+        $service = new GoogleSheetsService($this->publicId1, GoogleSheetsService::ALL_SHEET_PAGES);
+        $service->setPublicId($this->publicId2);
+        $expected = [
+            'en' => [
+                'hello.world' => 'hello world!',
+                'cats.cute' => 'cats are cute.',
+            ],
+            'de' => [
+                'hello.world' => 'hallo welt!',
+                'cats.cute' => 'katzen sind süß.',
+            ],
+        ];
+
+        $this->assertTrue($service->getSheetMode() === GoogleSheetsService::ALL_SHEET_PAGES);
+        $this->assertTrue($service->getSheetPage() === 1); // start page
+
+        $translations = $service->getTranslations(true);
+        $this->assertCount(2, $translations['en'], 'Merging went wrong with Sheetmode = ALL_SHEET_PAGES');
+    }
+
+    public function testParameters_sheetMode_default()
+    {
+        $service = new GoogleSheetsService($this->publicId1, '1');
+
+        $this->assertTrue($service->getSheetMode() === GoogleSheetsService::SINGLE_SHEET_PAGE);
+        $this->assertTrue($service->getSheetPage() === 1);
+
+        $service = new GoogleSheetsService($this->publicId1, 'all');
+
+        $this->assertTrue($service->getSheetMode() === GoogleSheetsService::ALL_SHEET_PAGES);
+    }
+
+    public function testParameters_sheetMode_invalid()
+    {
+        $this->expectException(\InvalidArgumentException::class, 'Entered a negative value for the sheet mode and the code did not throw any error.');
+        $service = new GoogleSheetsService($this->publicId1, -1);
+    }
+
+    public function testParameters_publicId_default()
+    {
+        $service = new GoogleSheetsService($this->publicId1, 'all');
+
+        $this->assertTrue($service->getPublicId() === $this->publicId1);
+    }
+
+    public function testParameters_publicId_invalid()
+    {
+        $this->expectException(\InvalidArgumentException::class, 'Entered an array for the publicId and the service didn\'t throw an error.');
+        $service = new GoogleSheetsService(['test'], 'all');
+    }
+
     public function testGetLocales_noPublicId()
     {
         $googleSheetsService = $this->_getService();
@@ -205,7 +270,7 @@ class GoogleSheetsServiceTest extends PhiilTestCase
     private function _getService(): GoogleSheetsService
     {
         $service = $this->get('phil_googlesheets_translations_bundle.googlesheets_service');
-        $service->setSheetMode(GoogleSheetsService::SINGLE_SHEET_PAGE);
+        $service->setSheetMode(1);
 
         return $service;
     }

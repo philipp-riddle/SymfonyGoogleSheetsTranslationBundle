@@ -11,7 +11,8 @@
     
     <services>
         <service id="phil_googlesheets_translations_bundle.googlesheets_service" class="Phiil\GoogleSheetsTranslationBundle\Service\GoogleSheetsService" public="true">
-            <argument type="service" id="Symfony\Component\DependencyInjection\ContainerInterface" />
+            <argument>%googlesheets_translations.sheet.publicId%</argument>
+            <argument>%googlesheets_translations.sheet.mode%</argument>
         </service>
         <service id="Phiil\GoogleSheetsTranslationBundle\Service\GoogleSheetsService" alias="phil_googlesheets_translations_bundle.googlesheets_service" public="false" />
         

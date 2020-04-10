@@ -7,11 +7,13 @@ use InvalidArgumentException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class GoogleSheetsService
 {
-    const ALL_SHEET_PAGES = 1;
-    const SINGLE_SHEET_PAGE = 2;
+    const ALL_SHEET_PAGES = -25;
+    const SINGLE_SHEET_PAGE = -26;
+
     const MAX_SHEET_PAGES = 25;
 
     private $publicSheetsUrlPrefix = 'https://spreadsheets.google.com/feeds/cells/';
@@ -24,13 +26,18 @@ class GoogleSheetsService
     private $translations;
     private $locales;
 
-    private $container;
     private $cache;
     private $parser;
 
-    public function __construct(ContainerInterface $container)
+    /**
+     * @param $publicId ID of the GoogleSheet
+     * @param $sheetMode defines which page(s) should be included in the translations. choose a positive integer or enter 'all'
+     */
+    public function __construct($publicId, $sheetMode)
     {
-        $this->container = $container;
+        $this->setPublicId($publicId);
+        $this->setSheetMode($sheetMode);
+
         $this->cache = new TranslationCacheService();
         $this->parser = new TranslationParser();
 
@@ -149,7 +156,7 @@ class GoogleSheetsService
             throw $exc;
         } catch (Exception $exc) {
             if ($exitOnError) {
-                throw new InvalidArgumentException('Invalid publicId (sheet could not be found).');
+                throw new InvalidArgumentException('Invalid publicId (sheet could not be found, url: ' . $this->getSheetsUrl(). ')');
             }
 
             return false;
@@ -172,39 +179,21 @@ class GoogleSheetsService
 
     public function getPublicId(): string
     {
-        if ($this->publicId !== null) {
-            return $this->publicId;
-        }
-
-        return $this->container->getParameter('googlesheets_translations.sheet.publicId');
+        return $this->publicId;
     }
 
-    public function setPublicId(string $publicId)
+    public function setPublicId($publicId)
     {
+        if (!is_string($publicId)) {
+            throw new InvalidArgumentException('$publicId must be a string; no other variable type is permitted.');
+        }
+
         $this->publicId = $publicId;
     }
 
-    public function getSheetMode(): int
+    public function getSheetPage()
     {
-        if ($this->sheetMode !== null) {
-            return $this->sheetMode;
-        }
-
-        $param = $this->container->getParameter('googlesheets_translations.sheet.mode');
-
-        if ('all' === $param) {
-            return self::ALL_SHEET_PAGES;
-        }
-
-        $pageId = intval($param);
-
-        if (0 === $pageId) {
-            throw new InvalidArgumentException('Invalid parameter choise - either enter "all" to load all sheet pages or an integer to define which sheet page should be loaded.');
-        }
-
-        $this->setSheetPage($pageId);
-
-        return self::SINGLE_SHEET_PAGE;
+        return $this->sheetPage;
     }
 
     public function setSheetPage(int $sheetPage)
@@ -212,9 +201,27 @@ class GoogleSheetsService
         $this->sheetPage = $sheetPage;
     }
 
-    public function setSheetMode(int $sheetMode)
+    public function getSheetMode(string $sheetMode = null): int
     {
-        $this->sheetMode = $sheetMode;
+        return $this->sheetMode;
+    }
+
+    public function setSheetMode($sheetMode)
+    {
+        if ('all' === $sheetMode || self::ALL_SHEET_PAGES === $sheetMode) {
+            $this->sheetMode = self::ALL_SHEET_PAGES;
+
+            return;
+        }
+
+        $pageId = intval($sheetMode);
+
+        if (0 >= $pageId) {
+            throw new InvalidArgumentException('Invalid sheetMode - either enter "all" to load all sheet pages or an integer to define which sheet page should be loaded');
+        }
+ 
+        $this->setSheetPage($sheetMode);
+        $this->sheetMode = self::SINGLE_SHEET_PAGE;
     }
 
     /**
