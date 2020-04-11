@@ -7,7 +7,7 @@ use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
-class PhilGoogleSheetsTranslationsBundleExtension extends Extension
+class PhiilGoogleSheetsTranslationsBundleExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container)
     {

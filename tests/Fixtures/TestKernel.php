@@ -17,7 +17,7 @@ class TestKernel extends Kernel
     {
         return [
             new \Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
-            new \Phiil\GoogleSheetsTranslationBundle\PhilGoogleSheetsTranslationBundle(),
+            new \Phiil\GoogleSheetsTranslationBundle\PhiilGoogleSheetsTranslationBundle(),
         ];
     }
 
