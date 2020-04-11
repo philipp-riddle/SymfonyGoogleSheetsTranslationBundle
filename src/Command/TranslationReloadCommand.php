@@ -85,7 +85,7 @@ class TranslationReloadCommand extends Command
             $io->success(sprintf('Yay, a total success! Added %s translations in total.', $translationsTotal));
 
             return 0;
-        } 
+        }
         
         $io->error(sprintf('Uh oh. Something went wrong. Please try again in a few seconds (updated translations: %s)', $translationsTotal));
 
