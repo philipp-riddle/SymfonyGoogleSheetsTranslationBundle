@@ -18,13 +18,17 @@ Translation management can be rather... pesky. This bundle allows you to use a s
 Run `composer require phiil/googlesheets-translation-bundle`
 
 ## Usage
+### Video Guide
+Want to watch a video instead of reading the guide? Today you're lucky! Watch the video on YouTube:
+[![Watch the video](https://i.imgur.com/TeOo1cq.png)](https://youtu.be/8WgbDpzrjCs)
+
+### Text Guide
 The first thing you need is a Googlesheet, go ahead and create on [sheets.google.com](https://sheets.google.com). My demo translations sheet is available at [this link](https://docs.google.com/spreadsheets/d/1D2qOEgEKgMy7qh0B-PQMzdil8AoE5NvYMsNuusqM-IA/edit?usp=sharing). I'd suggest that you just duplicate that one into your account / apply this structure - feel free to change the head => add as many locales as you want!
 > Better customization & configuration possibilities for the GoogleSheet are in the works - for now, just try to stick as close as possible to the structure.
 
-### Publishing your sheet... to the web?
 Now, you need to publish it to the web. What first sounded very weird to me (should I really publish my translations publicly to the web?!), isn't really that dangerous. The chances of someone finding your translations is really low and on top of that no one can use it to attack you / do harm to your site.
 
-**Step-by-step publishing:**
+**Step-by-step tutorial:**
 1. Go to File > Publish to the web: ![Publish Step 1](https://i.imgur.com/kpJj7nb.png)
 2. A window should pop up, just press 'Publish' (assuming that you want to publish the whole sheet): ![Publish Step 2](https://i.imgur.com/TrIhthz.png)
 3. Now, you need to extract the ID of your sheet. Back to the URL window (CMD + L / CTRL + L for hot key lovers), copy the part  which is marked in the following image: ![Publish Step 3](https://i.imgur.com/yG0kXEi.png).
@@ -50,7 +54,7 @@ My final config (config/services.yaml):
 ```yaml
 parameters:
     googlesheets_translations.sheet.mode: 'all'
-    googlesheets_translations.sheet.publicId: '1E9r6LCSeQV6rrEVq2YuSnm1OEbbTjgc50G9OHHUvihk'
+    googlesheets_translations.sheet.publicId: '1D2qOEgEKgMy7qh0B-PQMzdil8AoE5NvYMsNuusqM-IA'
 ```
 
 6. Add the bundles' translation loader to your Symfony application:
@@ -61,4 +65,4 @@ parameters:
 #### Congratulations, you're all set!
 
 ## Problems? Issues?
-Just post them here on Github or contact me via E-Mail: [philipp@riddle.com](mailto:philipp@riddle.com). Feel free to contribute!
+Just post them here on Github or contact me via email: [philipp@riddle.com](mailto:philipp@riddle.com). Feel free to contribute!
