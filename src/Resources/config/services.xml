@@ -23,8 +23,8 @@
 
         <service id="phil_googlesheets_translations_bundle.translation_loader" class="Phiil\GoogleSheetsTranslationBundle\Translation\TranslationLoader" public="true">
             <argument type="service" id="Phiil\GoogleSheetsTranslationBundle\Service\GoogleSheetsService"/>
+            <tag name="translation.loader" priority="100" alias="gs_trans" />
         </service>
-
         
         <service id="phil_googlesheets_translations_bundle.translation_reload_command" class="Phiil\GoogleSheetsTranslationBundle\Command\TranslationReloadCommand" public="false">
             <argument type="service" id="Phiil\GoogleSheetsTranslationBundle\Service\GoogleSheetsService" />
