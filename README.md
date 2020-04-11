@@ -8,11 +8,14 @@ Translation management can be rather... pesky. This bundle allows you to use a s
 **Features:**
 - *Use as many languages as you want:* this bundle sets you no limits, from just one locale (use case: you just want to keep texts out of your lovely source code) to even thirteen locales (because you just learned them on Dualingo)
 - *Decide which sheet page you want to use for your translations:* Only the first sheet page of your GoogleSheet should be used for translations? No problem, you need one more setting. Although this is possible, we recommend to use the default mode which automatically includes all the sheets and merges them into one (translations-wise - **this bundle does not edit your GoogleSheet**).
-- *One command to push it all...:* This bundle also provides you with one command which enables you to reload & push your translations in all available languages within seconds
+- *One command to push it all...:* This bundle also provides you with one command which enables you to reload & push your translations in all available languages within seconds.
 
 **Requirements**
 - Symfony 5.0 (soon, work in progress: check out the "4.4" branch to use this bundle with Symfony 4.4)
 - PHP >= 7.2.5
+
+## Installation
+Run `composer require phiil/googlesheets-translation-bundle`
 
 ## Usage
 The first thing you need is a Googlesheet, go ahead and create on [sheets.google.com](https://sheets.google.com). My demo translations sheet is available at [this link](https://docs.google.com/spreadsheets/d/1D2qOEgEKgMy7qh0B-PQMzdil8AoE5NvYMsNuusqM-IA/edit?usp=sharing). I'd suggest that you just duplicate that one into your account / apply this structure - feel free to change the head => add as many locales as you want!
