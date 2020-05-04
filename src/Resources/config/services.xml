@@ -7,12 +7,17 @@
     <parameters>
         <parameter key="googlesheets_translations.sheet.publicId"></parameter>
         <parameter key="googlesheets_translations.sheet.mode">all</parameter>
+        <parameter key="googlesheets_translations.export">true</parameter>
+        <parameter key="googlesheets_translations.export_dir">var/cache/translations</parameter>
     </parameters>
     
     <services>
         <service id="phil_googlesheets_translations_bundle.googlesheets_service" class="Phiil\GoogleSheetsTranslationBundle\Service\GoogleSheetsService" public="true">
             <argument>%googlesheets_translations.sheet.publicId%</argument>
             <argument>%googlesheets_translations.sheet.mode%</argument>
+            <argument>%googlesheets_translations.export%</argument>
+            <argument>%googlesheets_translations.export_dir%</argument>
+            <argument>%kernel.project_dir%</argument>
         </service>
         <service id="Phiil\GoogleSheetsTranslationBundle\Service\GoogleSheetsService" alias="phil_googlesheets_translations_bundle.googlesheets_service" public="true" />
         

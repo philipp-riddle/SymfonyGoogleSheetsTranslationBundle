@@ -8,6 +8,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
+use Symfony\Component\Filesystem\Filesystem;
 
 class GoogleSheetsService
 {
@@ -22,6 +24,11 @@ class GoogleSheetsService
     private $sheetPage = 1; // default - just load the first.
     private $publicId;
 
+    private $exportDir;
+    private $export;
+    private $projectDir;
+    private $fs;
+
     private $sheetContent;
     private $translations;
     private $locales;
@@ -33,10 +40,15 @@ class GoogleSheetsService
      * @param $publicId ID of the GoogleSheet
      * @param $sheetMode defines which page(s) should be included in the translations. choose a positive integer or enter 'all'
      */
-    public function __construct($publicId, $sheetMode)
+    public function __construct($publicId, $sheetMode, $export, $exportDir, $projectDir)
     {
         $this->setPublicId($publicId);
         $this->setSheetMode($sheetMode);
+
+        $this->export = $export;
+        $this->exportDir = $exportDir;
+        $this->projectDir = $projectDir;
+        $this->fs = new Filesystem();
 
         $this->cache = new TranslationCacheService();
         $this->parser = new TranslationParser();
@@ -94,6 +106,8 @@ class GoogleSheetsService
         $this->translations = $this->parser->getTranslations();
         $this->locales = $this->parser->getLocales();
         
+        $this->_exportTranslations();
+
         // save loaded values to the cache as JSON arrays
         $this->cache->saveCacheItemByName('translations', json_encode($this->translations));
         $this->cache->saveCacheItemByName('locales', json_encode($this->locales));
@@ -120,6 +134,23 @@ class GoogleSheetsService
         }
         
         return $this->locales !== null;
+    }
+
+    private function _exportTranslations()
+    {
+        if (!$this->export) {
+            return true;
+        }
+        
+        $exportDir = $this->projectDir . '/var/cache/translations';
+
+        try {
+            $this->fs->mkdir($exportDir);
+        } catch (IOExceptionInterface $ex) {
+            return false;
+        }
+
+        file_put_contents($this->projectDir . '/' . $this->exportDir . '/translations.json', json_encode($this->translations));
     }
 
     /**
@@ -251,5 +282,10 @@ class GoogleSheetsService
     public function getSheetContent(): array
     {
         return $this->sheetContent;
+    }
+
+    public function getProjectDir()
+    {
+        return $this->projectDir;
     }
 }

@@ -19,7 +19,7 @@ class GoogleSheetsServiceTest extends PhiilTestCase
 
     public function testParameters_sheetMode_number()
     {
-        $service = new GoogleSheetsService($this->publicId1, 2);
+        $service = $this->_getServiceWithParams($this->publicId1, 2);
 
         $this->assertTrue($service->getSheetMode() === GoogleSheetsService::SINGLE_SHEET_PAGE);
         $this->assertTrue($service->getSheetPage() === 2);
@@ -27,11 +27,13 @@ class GoogleSheetsServiceTest extends PhiilTestCase
         $translations = $service->getTranslations(true);
         $this->assertCount(3, $service->getLocales());
         $this->assertCount(1, $translations['en']);
+
+        $this->assertTrue(file_exists($this->projectDir . '/var/cache/translations/translations.json'), 'File didn\'t get exported');
     }
 
     public function testParameters_sheetMode_constant()
     {
-        $service = new GoogleSheetsService($this->publicId1, GoogleSheetsService::ALL_SHEET_PAGES);
+        $service = $this->_getServiceWithParams($this->publicId1, GoogleSheetsService::ALL_SHEET_PAGES);
         $service->setPublicId($this->publicId2);
         $expected = [
             'en' => [
@@ -53,12 +55,12 @@ class GoogleSheetsServiceTest extends PhiilTestCase
 
     public function testParameters_sheetMode_default()
     {
-        $service = new GoogleSheetsService($this->publicId1, '1');
+        $service = $this->_getServiceWithParams($this->publicId1, '1');
 
         $this->assertTrue($service->getSheetMode() === GoogleSheetsService::SINGLE_SHEET_PAGE);
         $this->assertTrue($service->getSheetPage() === 1);
 
-        $service = new GoogleSheetsService($this->publicId1, 'all');
+        $service = $this->_getServiceWithParams($this->publicId1, 'all');
 
         $this->assertTrue($service->getSheetMode() === GoogleSheetsService::ALL_SHEET_PAGES);
     }
@@ -66,12 +68,12 @@ class GoogleSheetsServiceTest extends PhiilTestCase
     public function testParameters_sheetMode_invalid()
     {
         $this->expectException(\InvalidArgumentException::class, 'Entered a negative value for the sheet mode and the code did not throw any error.');
-        $service = new GoogleSheetsService($this->publicId1, -1);
+        $service = $this->_getServiceWithParams($this->publicId1, -1);
     }
 
     public function testParameters_publicId_default()
     {
-        $service = new GoogleSheetsService($this->publicId1, 'all');
+        $service = $this->_getServiceWithParams($this->publicId1, 'all');
 
         $this->assertTrue($service->getPublicId() === $this->publicId1);
     }
@@ -79,7 +81,7 @@ class GoogleSheetsServiceTest extends PhiilTestCase
     public function testParameters_publicId_invalid()
     {
         $this->expectException(\InvalidArgumentException::class, 'Entered an array for the publicId and the service didn\'t throw an error.');
-        $service = new GoogleSheetsService(['test'], 'all');
+        $service = $this->_getServiceWithParams(['test'], 'all');
     }
 
     public function testGetLocales_noPublicId()
@@ -179,6 +181,8 @@ class GoogleSheetsServiceTest extends PhiilTestCase
         $this->assertCount(1, $translations['en'], 'The service returned more translations than expected.');
         $this->assertCount(1, $translations['en'], 'The service returned more translations than expected.');
         $this->assertEquals($expected, $translations, 'The service returned different translations than expected.');
+
+        $this->assertTrue(file_exists($this->projectDir . '/var/cache/translations/translations.json'), 'File didn\'t get exported');
     }
 
     public function testGetTranslations_noTransStrings()
@@ -273,6 +277,11 @@ class GoogleSheetsServiceTest extends PhiilTestCase
         $service->setSheetMode(1);
 
         return $service;
+    }
+
+    private function _getServiceWithParams($riddleId, $mode)
+    {
+        return new GoogleSheetsService($riddleId, $mode, true, 'var/cache/translations', $this->projectDir);
     }
 
     private function _checkLocalesArray(array $expected, array $locales, GoogleSheetsService $googleSheetsService)
