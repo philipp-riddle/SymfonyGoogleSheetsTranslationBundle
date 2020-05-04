@@ -8,9 +8,12 @@ use Phiil\GoogleSheetsTranslationBundle\Tests\Fixtures\TestKernel;
 
 class PhiilTestCase extends WebTestCase
 {
+    protected $projectDir;
+
     protected function setUp(): void
     {
         self::$container = $this->getContainer();
+        $this->projectDir = dirname(dirname(dirname(__FILE__)));
     }
 
     protected function getContainer()
