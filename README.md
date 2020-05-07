@@ -57,9 +57,7 @@ parameters:
     googlesheets_translations.sheet.publicId: '1D2qOEgEKgMy7qh0B-PQMzdil8AoE5NvYMsNuusqM-IA'
 ```
 
-6. Add the bundles' translation loader to your Symfony application:
-
-7. Push your translations with the built-in command: `phiil:translation:reload` (in my case, I have to execute `php bin/console phiil:translation:reload`). Have a look at the output of my console: ![Publish Step 7](https://i.imgur.com/dF5AzTX.png)
+6. Push your translations with the built-in command: `phiil:translation:reload` (in my case, I have to execute `php bin/console phiil:translation:reload`). Have a look at the output of my console: ![Publish Step 7](https://i.imgur.com/dF5AzTX.png)
 
 
 #### Congratulations, you're all set!
