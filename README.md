@@ -11,8 +11,8 @@ Translation management can be rather... pesky. This bundle allows you to use a s
 - *One command to push it all...:* This bundle also provides you with one command which enables you to reload & push your translations in all available languages within seconds.
 
 **Requirements**
-- Symfony 4.4/5.0 ("4.4" & "5.0" branches for that purpose)
-- PHP >= 7.2.5
+- Symfony ^5.2 (an older version for Symfony Version 4.4 is also available)
+- PHP ^7.4|^8.0
 
 ## Installation
 Run `composer require phiil/googlesheets-translation-bundle`
