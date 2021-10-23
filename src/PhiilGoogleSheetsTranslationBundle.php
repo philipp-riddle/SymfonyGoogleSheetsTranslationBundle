@@ -9,6 +9,6 @@ class PhiilGoogleSheetsTranslationBundle extends Bundle
 {
     public function getContainerExtension()
     {
-        return new  PhiilGoogleSheetsTranslationsBundleExtension();
+        return new PhiilGoogleSheetsTranslationsBundleExtension();
     }
 }

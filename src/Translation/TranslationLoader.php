@@ -9,8 +9,8 @@ use Phiil\GoogleSheetsTranslationBundle\Service\GoogleSheetsService;
 
 class TranslationLoader implements LoaderInterface
 {
-    private $locales;
-    private $translations;
+    private array $locales;
+    private array $translations;
 
     public function __construct(GoogleSheetsService $sheetsService)
     {

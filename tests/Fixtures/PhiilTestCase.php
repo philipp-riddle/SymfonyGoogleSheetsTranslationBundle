@@ -8,7 +8,7 @@ use Phiil\GoogleSheetsTranslationBundle\Tests\Fixtures\TestKernel;
 
 class PhiilTestCase extends WebTestCase
 {
-    protected $projectDir;
+    protected string $projectDir;
 
     protected function setUp(): void
     {

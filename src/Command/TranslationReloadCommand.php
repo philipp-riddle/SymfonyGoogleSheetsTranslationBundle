@@ -3,23 +3,24 @@
 namespace Phiil\GoogleSheetsTranslationBundle\Command;
 
 use Phiil\GoogleSheetsTranslationBundle\Service\GoogleSheetsService;
+use Phiil\GoogleSheetsTranslationBundle\Service\TranslationService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 class TranslationReloadCommand extends Command
 {
     protected static $defaultName = 'phiil:translation:reload';
 
-    private $googleSheetsService;
+    private GoogleSheetsService $googleSheetsService;
+    private TranslationService $translationService;
 
-    public function __construct(GoogleSheetsService $googleSheetsService)
+    public function __construct(GoogleSheetsService $googleSheetsService, TranslationService $translationService)
     {
         $this->googleSheetsService = $googleSheetsService;
+        $this->translationService = $translationService;
 
         parent::__construct();
     }
@@ -54,40 +55,17 @@ class TranslationReloadCommand extends Command
             }
         }
 
-        $command = $this->getApplication()->find('translation:update');
-        $arguments = [
-            'command' => 'translation:update',
-            '--force'  => true,
-        ];
+        $io->info('Fetching translations from the Google Sheet...');
+        $translations = $this->googleSheetsService->getTranslations(true);
+        $io->text('Done.');
 
-        $translations = $this->googleSheetsService->getTranslations();
-        $translationsTotal = 0;
-        $success = true;
+        $io->info('Updating symfony translation data & files...');
+        $this->translationService->update($locales);
+        $io->text('Done.');
 
-        $io->text(sprintf('Found %s languages: %s', count($locales), implode(', ', $locales)));
-        $io->section('Updating translation strings...');
-
-        foreach ($locales as $locale) {
-            $arguments['locale'] = $locale;
-            $greetInput = new ArrayInput($arguments);
-            $returnCode = $command->run($greetInput, new NullOutput());
-
-            if ($returnCode === 0) {
-                $translationsTotal += count($translations[$locale]);
-                $io->text(sprintf('++ %s translations for %s', count($translations[$locale]), $locale));
-            } else {
-                $success = false;
-                $io->warning(sprintf('!! Error while updating translations for %s: Please try again in a few seconds.', $locale));
-            }
-        }
-
-        if ($success) {
-            $io->success(sprintf('Yay, a total success! Added %s translations in total.', $translationsTotal));
-
-            return 0;
-        }
-        
-        $io->error(sprintf('Uh oh. Something went wrong. Please try again in a few seconds (updated translations: %s)', $translationsTotal));
+        $io->success('Reloaded your translations successfully.');
+        $io->text(\sprintf('Translation Count: %d', \count($translations[0])));
+        $io->text(\sprintf('Locale Count: %d', \count($locales)));
 
         return 0;
     }

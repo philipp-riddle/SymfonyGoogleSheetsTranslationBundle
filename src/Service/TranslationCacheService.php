@@ -7,9 +7,9 @@ use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 class TranslationCacheService
 {
-    private $cacheItemPrefix ='phiil_googlesheets_translations';
+    private string $cacheItemPrefix ='phiil_googlesheets_translations';
 
-    private $cache;
+    private FilesystemAdapter $cache;
 
     public function __construct()
     {

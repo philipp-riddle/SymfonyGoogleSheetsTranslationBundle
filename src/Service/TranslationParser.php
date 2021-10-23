@@ -10,9 +10,9 @@ use Exception;
 
 class TranslationParser
 {
-    private $entries;
-    private $locales;
-    private $translations;
+    private array $entries;
+    private array $locales;
+    private array $translations;
 
     public function __construct()
     {

@@ -4,10 +4,6 @@ namespace Phiil\GoogleSheetsTranslationBundle\Service;
 
 use Exception;
 use InvalidArgumentException;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Contracts\Cache\ItemInterface;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -18,29 +14,29 @@ class GoogleSheetsService
 
     const MAX_SHEET_PAGES = 25;
 
-    private $publicSheetsUrlPrefix = 'https://spreadsheets.google.com/feeds/cells/';
-    private $publicSheetsUrlSuffix = '/public/full?alt=json';
+    private string $publicSheetsUrlPrefix = 'https://spreadsheets.google.com/feeds/cells/';
+    private string $publicSheetsUrlSuffix = '/public/full?alt=json';
     private $sheetMode; // have a look at ALL_SHEET_PAGES & MAX_SHEET_PAGES
-    private $sheetPage = 1; // default - just load the first.
-    private $publicId;
+    private int $sheetPage = 1; // default - just load the first.
+    private string $publicId;
 
-    private $exportDir;
-    private $export;
-    private $projectDir;
-    private $fs;
+    private string $exportDir;
+    private ?bool $export;
+    private string $projectDir;
+    private Filesystem $fs;
 
-    private $sheetContent;
-    private $translations;
-    private $locales;
+    private array $sheetContent;
+    private array $translations;
+    private array $locales;
 
-    private $cache;
-    private $parser;
+    private TranslationCacheService $cache;
+    private TranslationParser $parser;
 
     /**
      * @param $publicId ID of the GoogleSheet
      * @param $sheetMode defines which page(s) should be included in the translations. choose a positive integer or enter 'all'
      */
-    public function __construct($publicId, $sheetMode, $export, $exportDir, $projectDir)
+    public function __construct($publicId, $sheetMode, $export, string $exportDir, string $projectDir)
     {
         $this->setPublicId($publicId);
         $this->setSheetMode($sheetMode);

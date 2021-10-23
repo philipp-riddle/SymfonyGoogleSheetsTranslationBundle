@@ -7,15 +7,15 @@ use Phiil\GoogleSheetsTranslationBundle\Tests\Fixtures\PhiilTestCase;
 
 class GoogleSheetsServiceTest extends PhiilTestCase
 {
-    private $publicId1 = '1tPNKrSSPoQoJARdBfoBXgBPo-lEGe5U_7NutObXI2CI';
-    private $publicId2 = '1D2qOEgEKgMy7qh0B-PQMzdil8AoE5NvYMsNuusqM-IA';
+    private string $publicId1 = '1tPNKrSSPoQoJARdBfoBXgBPo-lEGe5U_7NutObXI2CI';
+    private string $publicId2 = '1D2qOEgEKgMy7qh0B-PQMzdil8AoE5NvYMsNuusqM-IA';
 
-    private $moreLocalesSheet = 2;
-    private $emptySheet = 3;
-    private $noStringsSheet = 4;
-    private $skipRowSheet = 5;
-    private $skipColSheet = 6;
-    private $noLocalesSheet = 7;
+    private int $moreLocalesSheet = 2;
+    private int $emptySheet = 3;
+    private int $noStringsSheet = 4;
+    private int $skipRowSheet = 5;
+    private int $skipColSheet = 6;
+    private int $noLocalesSheet = 7;
 
     public function testParameters_sheetMode_number()
     {
