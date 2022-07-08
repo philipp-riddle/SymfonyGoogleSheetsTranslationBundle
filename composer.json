@@ -10,10 +10,10 @@
         }
     ],
     "require": {
-        "php": "^7.4|^8.0",
-        "symfony/framework-bundle": "^5.3",
-        "symfony/translation": "^5.3",
-        "symfony/cache": "^5.3"
+        "php": "^7.4|^8.0|^8.1",
+        "symfony/framework-bundle": "^5.4",
+        "symfony/translation": "^5.4",
+        "symfony/cache": "^5.4"
     },
     "autoload": {
         "psr-4": {
@@ -26,7 +26,7 @@
         }
     },
     "require-dev": {
-        "symfony/phpunit-bridge": "^5.3",
+        "symfony/phpunit-bridge": "^5.4",
         "friendsofphp/php-cs-fixer": "^2.16"
     }
 }

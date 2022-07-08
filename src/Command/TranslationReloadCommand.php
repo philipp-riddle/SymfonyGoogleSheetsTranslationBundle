@@ -30,7 +30,7 @@ class TranslationReloadCommand extends Command
         $this
             ->setDescription('Reloads all the translations from your chosen GoogleSheet.')
             ->setHelp('Usage: ... phiil:translation:reload --exclude=de,en')
-    ;
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -47,7 +47,7 @@ class TranslationReloadCommand extends Command
             return 1;
         }
         
-        $setupLog = $this->_setupTranslationDirectory($locales);
+        $setupLog = $this->setupTranslationDirectory($locales);
 
         if (!empty($setupLog)) {
             foreach ($setupLog as $logItem) {
@@ -73,13 +73,13 @@ class TranslationReloadCommand extends Command
     /**
      * Create the ./translations directory if it doesn't exist and touch files to prepare the translation loader
      */
-    private function _setupTranslationDirectory(array $locales) :array
+    private function setupTranslationDirectory(array $locales) :array
     {
         $filesystem = new Filesystem();
         $log = [];
 
-        $this->_createTranslationsDirectory($filesystem, $log);
-        $this->_touchStandardFiles($filesystem, $locales, $log);
+        $this->createTranslationsDirectory($filesystem, $log);
+        $this->touchStandardFiles($filesystem, $locales, $log);
         
         return $log;
     }
@@ -87,7 +87,7 @@ class TranslationReloadCommand extends Command
     /**
      * Make sure that the translations directory exists
      */
-    private function _createTranslationsDirectory(Filesystem $filesystem, array &$log, string $directoryName = 'translations')
+    private function createTranslationsDirectory(Filesystem $filesystem, array &$log, string $directoryName = 'translations')
     {
         if (!$filesystem->exists('./' . $directoryName)) {
             $filesystem->mkdir('./' . $directoryName);
@@ -98,7 +98,7 @@ class TranslationReloadCommand extends Command
     /**
      * If these files don't exist the translation loader doesn't work
      */
-    private function _touchStandardFiles(FileSystem $filesystem, array $locales, array &$log)
+    private function touchStandardFiles(FileSystem $filesystem, array $locales, array &$log)
     {
         foreach ($locales as $index => $locale) {
             $fileName = './translations/messages.' . $locale . '.gs_trans';

@@ -23,11 +23,9 @@
         
         <service id="phil_googlesheets_translations_bundle.translation_service" class="Phiil\GoogleSheetsTranslationBundle\Service\TranslationService" public="true">
             <argument type="service" id="Phiil\GoogleSheetsTranslationBundle\Service\GoogleSheetsService"/>
-        </service>
-        <service id="Phiil\GoogleSheetsTranslationBundle\Service\TranslationService" alias="phil_googlesheets_translations_bundle.translation_service" public="true">
-            <argument type="service" id="Phiil\GoogleSheetsTranslationBundle\Service\GoogleSheetsService"/>
             <argument type="service" id="Symfony\Component\HttpKernel\KernelInterface"/>
         </service>
+        <service id="Phiil\GoogleSheetsTranslationBundle\Service\TranslationService" alias="phil_googlesheets_translations_bundle.translation_service" public="true" />
 
         <service id="phil_googlesheets_translations_bundle.translation_loader" class="Phiil\GoogleSheetsTranslationBundle\Translation\TranslationLoader" public="true">
             <argument type="service" id="Phiil\GoogleSheetsTranslationBundle\Service\GoogleSheetsService"/>
